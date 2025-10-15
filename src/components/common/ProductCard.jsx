@@ -1,29 +1,40 @@
 import PropTypes from 'prop-types'
-import StarIcon from '../../assets/star.svg'
+import { IconShoppingCartPlus, IconShoppingCartX } from '@tabler/icons-react'
 import { useContext } from 'react'
 import { CartContext } from '../../context/CartContext'
+import { AnimatePresence, motion } from 'motion/react'
 
 export default function ProductCard({ product }) {
-  const { addCart } = useContext(CartContext)
+  const { addCart, removeCart, verifyProductInCart } = useContext(CartContext)
+  const isInCart = verifyProductInCart({ id: product.id })
 
   return (
-    <div className='max-h-[500px] bg-primary/50 border-2 border-primary overflow-hidden rounded-lg flex flex-col justify-between'>
-      <div className='text-pretty relative'>
-        <span className='absolute left-1 top-1 text-xs md:text-sm rounded-xl px-2 py-0.5 opacity-90 text-white bg-black'>{product.category}</span>
-        <img src={product.image} alt={product.title} className='h-60 mx-auto bg-white w-full object-contain p-1' />
+    <div className='border border-primary/30 rounded-b-xl w-80 group'>
+      <div className='bg-primary/20 aspect-square overflow-hidden'>
+        <img src={product.image} alt={`Image of ${product.title}`} className='object-contain size-full p-10 group-hover:scale-105 transition-transform duration-700 ease-in-out' />
       </div>
-      <h2 className='font-bold px-2'>{product.title}</h2>
-      <div className='px-2 max-h-24 overflow-y-auto hide-scrollbar text-sm lg:text-base'>
-        <p>{product.description}</p>
+      <div className='p-5 h-48 space-y-3'>
+        <span className='uppercase tracking-wider text-xs opacity-70'>{product.category}</span>
+        <p className='leading-snug text-pretty line-clamp-2 min-h-11'>{product.title}</p>
+        <div className='flex justify-between items-center'>
+          <span className='text-xl'>${product.price.toFixed(2)}</span>
+          <button onClick={() => { isInCart ? removeCart({ id: product.id }) : addCart({ product }) }} className='font-semibold w-28 space-x-2 border-2 border-primary/30 px-3 py-1 rounded-lg'>
+            <AnimatePresence mode='wait'>
+              {isInCart ? (
+                <motion.div key='remove' initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.2 }}>
+                  <IconShoppingCartX className='inline-block size-5 mr-0.5' />
+                  <span>Remove</span>
+                </motion.div>
+              ) : (
+                <motion.div key='add' initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.2 }}>
+                  <IconShoppingCartPlus className='inline-block size-5 mr-0.5' />
+                  <span>Add</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
       </div>
-      <div className='px-2 pt-2 flex justify-between items-center'>
-        <span className='font-bold text-lg lg:text-xl'>${product.price}</span>
-        <span className='flex items-center gap-1'>
-          <img src={StarIcon} alt="Star Icon" className='size-5' />
-          <p>{product.rating.rate} <span className='text-sm opacity-80'>({product.rating.count})</span></p>
-        </span>
-      </div>
-      <button className='bg-secondary m-3 px-3 py-2 rounded-lg hover:bg-secondary/80 transition-colors' onClick={() => addCart({ product })}>Agregar al carrito</button>
     </div>
   )
 }
@@ -32,13 +43,13 @@ ProductCard.propTypes = {
   product: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     rating: PropTypes.shape({
       rate: PropTypes.number.isRequired,
-      count: PropTypes.number.isRequired
+      count: PropTypes.number.isRequired,
     })
-  })
+  }).isRequired,
 }

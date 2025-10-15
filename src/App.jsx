@@ -1,30 +1,33 @@
-import { useState } from "react"
-import NavBar from "./components/ui/NavBar"
-import Hero from "./components/ui/Hero"
-import ProductSection from "./components/ui/ProductSection"
-import ButtonCart from "./components/common/ButtonCart"
-import ModalCart from "./components/ui/ModalCart"
+import { useContext } from 'react'
+import Navbar from './components/ui/Navbar'
+import { CartContext } from './context/CartContext'
+import BagButton from './components/common/BagButton'
+import Home from './pages/Home'
+import Hero from './components/ui/Hero'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Electronics from './pages/Electronics'
+import Jewelry from './pages/Jewelry'
+import Mens from './pages/Mens'
+import Womens from './pages/Womens'
 
 function App() {
-  const [darkMode, setDarkMode] = useState(matchMedia("(prefers-color-scheme: dark)").matches)
-  const [showCart, setShowCart] = useState(false)
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-  }
-
-  const toggleCart = () => {
-    setShowCart(!showCart)
-  }
+  const { cart ,darkMode } = useContext(CartContext)
 
   return (
-    <div className={`${darkMode ? "dark" : ""} flex flex-col h-full w-full bg-background text-text transition-colors duration-300`}>
-      <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Hero />
-      <ProductSection />
-      {showCart && <ModalCart toggleCart={toggleCart} />}
-      <ButtonCart toggleCart={toggleCart} />
-    </div>
+    <BrowserRouter>
+      <div className={`${darkMode ? 'dark' : 'light'} bg-background text-text transition-colors`}>
+        <Navbar />
+        <Hero />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/electronics' element={<Electronics />} />
+          <Route path='/jewelry' element={<Jewelry />} />
+          <Route path='/men' element={<Mens />} />
+          <Route path='/women' element={<Womens />} />
+        </Routes>
+        <BagButton itemCount={cart.length} />
+      </div>
+    </BrowserRouter>
   )
 }
 

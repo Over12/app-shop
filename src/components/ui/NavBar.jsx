@@ -1,25 +1,28 @@
-import shopLight from "../../assets/shop-light.svg"
-import shopDark from "../../assets/shop-dark.svg"
-import sunIcon from "../../assets/sun.svg"
-import moonIcon from "../../assets/moon.svg"
-import PropTypes from "prop-types"
+import { useContext } from 'react'
+import { motion } from 'motion/react'
+import { CartContext } from '../../context/CartContext'
+import { IconSunFilled, IconMoonFilled, IconShoppingBag } from '@tabler/icons-react'
+import { Link } from 'react-router-dom'
 
-export default function NavBar({ darkMode, toggleDarkMode }) {
+export default function Navbar() {
+  const { darkMode, toggleDarkMode } = useContext(CartContext)
+
   return (
-    <nav className="fixed w-full flex items-center justify-between px-5 lg:px-10 py-5 bg-primary/20 backdrop-blur border-b-2 border-primary/50 z-10">
-      <div className="flex items-center gap-1">
-        <img src={darkMode ? shopDark : shopLight} alt="Shop Icon" className="size-11" />
-        <span className="text-3xl font-bold text-primary">Shoplyx</span>
+    <nav className='fixed bg-background/80 backdrop-blur-lg grid grid-cols-3 inset-x-0 top-0 px-10 py-5 transition-colors z-50'>
+      <div className='flex items-center gap-1'>
+        <IconShoppingBag className='size-10' stroke={2.5} />
+        <span className='text-3xl font-bold'>Shoplyx</span>
       </div>
-      <button className={`relative size-11 bg-background rounded-full border-2 ${darkMode ? "border-white" : "border-yellow-400"}`} onClick={toggleDarkMode}>
-        <img src={moonIcon} alt="Sun Icon" className={`absolute size-7 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-300 ${darkMode ? 'rotate-0 opacity-100 scale-100' : 'rotate-90 opacity-0 scale-50'}`} />
-        <img src={sunIcon} alt="Moon Icon" className={`absolute size-7 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-300 ${darkMode ? '-rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'}`} />
-      </button>
+      <ul className='flex h-full items-center justify-center gap-7 uppercase'>
+        <li><Link to='/'>All</Link></li>
+        <li><Link to='/electronics'>Electronics</Link></li>
+        <li><Link to='/jewelry'>Jewelry</Link></li>
+        <li><Link to='/men'>Men</Link></li>
+        <li><Link to='/women'>Women</Link></li>
+      </ul>
+      <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} whileTap={{ rotate: -90 }} onClick={toggleDarkMode} className='justify-self-end'>
+        {darkMode ? <IconMoonFilled /> : <IconSunFilled />}
+      </motion.button>
     </nav>
   )
-}
-
-NavBar.propTypes = {
-  darkMode: PropTypes.bool.isRequired,
-  toggleDarkMode: PropTypes.func.isRequired,
 }

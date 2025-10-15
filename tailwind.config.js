@@ -12,7 +12,11 @@ export default {
         'primary': 'rgb(var(--primary))',
         'secondary': 'rgb(var(--secondary))',
         'accent': 'rgb(var(--accent))',
-       },
+      },
+      fontFamily: {
+        sans: ['Rubik', 'ui-sans-serif', 'system-ui'],
+        kaisei: ['Kaisei Decol', 'serif']
+      }
     },
   },
   plugins: [],

@@ -1,49 +1,16 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import PropTypes from "prop-types"
+import useCart from '../hooks/useCart'
+import useTheme from '../hooks/useTheme'
 
 const CartContext = createContext()
 
 const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([])
-
-  const addCart = ({ product }) => {
-    setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item.id === product.id)
-
-      if (existingProduct) {
-        return prevCart
-      }
-
-      return [...prevCart, {...product, mount: 1}]
-    })
-  }
-
-  const removeCart = ({ id }) => {
-    setCart(prevCart => prevCart.filter(product => product.id !== id))
-  }
-
-  const addMount = ({ id }) => {
-    setCart(prevCart => prevCart.map(product => {
-      if (product.id === id) {
-        return {...product, mount: product.mount + 1}
-      }
-
-      return product
-    }))
-  }
-
-  const removeMount = ({ id }) => {
-    setCart(prevCart => prevCart.map(product => {
-      if (product.id === id && product.mount > 1) {
-        return {...product, mount: product.mount - 1}
-      }
-
-      return product
-    }))
-  }
+  const { darkMode, toggleDarkMode } = useTheme()
+  const { cart, addCart, removeCart, addMount, removeMount, verifyProductInCart } = useCart()
 
   return (
-    <CartContext.Provider value={{ cart, addCart, removeCart, addMount, removeMount }}>
+    <CartContext.Provider value={{ cart, addCart, removeCart, addMount, removeMount, darkMode, toggleDarkMode, verifyProductInCart }}>
       {children}
     </CartContext.Provider>
   )
