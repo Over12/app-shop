@@ -7,10 +7,10 @@ const CartContext = createContext()
 
 const CartProvider = ({ children }) => {
   const { darkMode, toggleDarkMode } = useTheme()
-  const { cart, addCart, removeCart, addMount, removeMount, verifyProductInCart } = useCart()
+  const { cart, addCart, removeCart, clearCart, addMount, removeMount, verifyProductInCart } = useCart()
 
   return (
-    <CartContext.Provider value={{ cart, addCart, removeCart, addMount, removeMount, darkMode, toggleDarkMode, verifyProductInCart }}>
+    <CartContext.Provider value={{ cart, addCart, removeCart, clearCart, addMount, removeMount, darkMode, toggleDarkMode, verifyProductInCart }}>
       {children}
     </CartContext.Provider>
   )
