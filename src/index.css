@@ -57,3 +57,7 @@ html {
 html::-webkit-scrollbar {
   width: 0;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
