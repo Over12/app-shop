@@ -1,10 +1,10 @@
 import { useContext } from 'react'
-import Navbar from './components/ui/Navbar'
 import { CartContext } from './context/CartContext'
 import BagButton from './components/common/BagButton'
-import Home from './pages/Home'
+import NavBar from './components/ui/NavBar'
 import Hero from './components/ui/Hero'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
 import Electronics from './pages/Electronics'
 import Jewelry from './pages/Jewelry'
 import Mens from './pages/Mens'
@@ -16,7 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className={`${darkMode ? 'dark' : 'light'} bg-background text-text transition-colors`}>
-        <Navbar />
+        <NavBar />
         <Hero />
         <Routes>
           <Route path='/' element={<Home />} />
